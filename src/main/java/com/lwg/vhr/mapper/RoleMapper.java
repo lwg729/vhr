@@ -3,8 +3,11 @@ package com.lwg.vhr.mapper;
 import com.lwg.vhr.pojo.Role;
 import com.lwg.vhr.pojo.RoleExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface RoleMapper {
     long countByExample(RoleExample example);
 

@@ -3,8 +3,11 @@ package com.lwg.vhr.mapper;
 import com.lwg.vhr.pojo.Hr;
 import com.lwg.vhr.pojo.HrExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface HrMapper {
     long countByExample(HrExample example);
 

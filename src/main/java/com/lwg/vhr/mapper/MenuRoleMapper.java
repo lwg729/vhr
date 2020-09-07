@@ -3,8 +3,11 @@ package com.lwg.vhr.mapper;
 import com.lwg.vhr.pojo.MenuRole;
 import com.lwg.vhr.pojo.MenuRoleExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface MenuRoleMapper {
     long countByExample(MenuRoleExample example);
 
