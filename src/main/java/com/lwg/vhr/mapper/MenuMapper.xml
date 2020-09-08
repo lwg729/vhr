@@ -13,6 +13,24 @@
     <result column="parentId" jdbcType="INTEGER" property="parentid" />
     <result column="enabled" jdbcType="BIT" property="enabled" />
   </resultMap>
+  <resultMap id="MenuWithRole" type="com.lwg.vhr.pojo.Menu" extends="BaseResultMap">
+    <collection property="roles" ofType="com.lwg.vhr.pojo.Role">
+      <id column="rid" property="id"/>
+      <result column="rname" property="name"/>
+      <result column="rnamezh" property="namezh"/>
+    </collection>
+  </resultMap>
+
+<select id="getAllMenuWithRole" resultMap="MenuWithRole">
+    select m.*, r.id rid,r.name rname, r.namezh rnamezh
+    from menu m ,
+        menu_role mr,
+        role r
+    where m.id=mr.mid
+    and mr.rid=r.id
+    order by m.id
+</select>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

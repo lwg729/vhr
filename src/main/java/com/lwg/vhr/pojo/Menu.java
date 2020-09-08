@@ -1,5 +1,7 @@
 package com.lwg.vhr.pojo;
 
+import java.util.List;
+
 public class Menu {
     private Integer id;
 
@@ -20,6 +22,25 @@ public class Menu {
     private Integer parentid;
 
     private Boolean enabled;
+    private List<Role> roles;
+
+    private List<Menu> children;
+
+    public List<Menu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Menu> children) {
+        this.children = children;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
     public Integer getId() {
         return id;

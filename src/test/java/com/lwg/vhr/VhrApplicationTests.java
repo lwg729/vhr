@@ -21,7 +21,7 @@ class VhrApplicationTests {
 
     @Test
     public void getAllmenu(){
-        List<Menu> allMenu = menuService.getAllMenu();
+        List<Menu> allMenu = menuService.getAllMenuWithRole();
         System.out.println(allMenu);
     }
 }

@@ -15,8 +15,8 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
-    public List<Menu> getAllMenu(){
-        return menuMapper.selectByExample(null);
+    public List<Menu> getAllMenuWithRole(){
+        return menuMapper.getAllMenuWithRole();
 
     }
 }
