@@ -15,6 +15,7 @@ import org.springframework.util.AntPathMatcher;
 import com.lwg.vhr.pojo.Menu;
 import com.lwg.vhr.service.impl.MenuServiceImpl;
 
+//该类的的主要作用是通过当前的请求地址,获得改地址需要的用户角色
 @Component
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
@@ -23,6 +24,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    //getAttributes方法返回的集合最终会到AccessDecisionMannger(授权管理器)中
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
 
@@ -34,9 +36,11 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
             return null;
         }
 
+        //查询角色与url的关系
         List<Menu> allMenu = menuService.getAllMenuWithRole();
         for (Menu menu : allMenu) {
             if (antPathMatcher.match(menu.getUrl(), requestUrl) && menu.getRoles().size() > 0) {
+                //获取菜单对应的角色 并返回一个角色的集合
                 List<Role> roles = menu.getRoles();
                 int size = roles.size();
                 String[] values = new String[size];
@@ -47,6 +51,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
             }
         }
+        //所有未匹配到的路径 都是登录后可访问  如果返回null 不登录也可访问
         return SecurityConfig.createList("ROLE_LOGIN");
     }
 
@@ -55,8 +60,10 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         return null;
     }
 
+    //检验传入的安全对象是否和FilterInvocation类同一类型，或是他的子类 getAttributes(Object o)方法会调用这个方法
+    //保证String requestUrl = ((FilterInvocation) o).getRequestUrl();的正确定
     @Override
     public boolean supports(Class<?> clazz) {
-        return false;
+        return FilterInvocation.class.isAssignableFrom(clazz);
     }
 }
