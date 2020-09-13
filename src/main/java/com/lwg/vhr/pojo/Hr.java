@@ -1,13 +1,14 @@
 package com.lwg.vhr.pojo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.Authentication;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class Hr implements UserDetails {
     private Integer id;
@@ -30,6 +31,19 @@ public class Hr implements UserDetails {
 
     private String remark;
     private List<Role> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Hr hr = (Hr) o;
+        return Objects.equals(username, hr.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 
     public List<Role> getRoles() {
         return roles;
@@ -79,10 +93,6 @@ public class Hr implements UserDetails {
         this.address = address == null ? null : address.trim();
     }
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
@@ -116,13 +126,15 @@ public class Hr implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities=new ArrayList<>();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(roles.size());
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
     }
+
     public String getPassword() {
         return password;
     }

@@ -1,5 +1,6 @@
 package com.lwg.vhr.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,8 @@ public class AuthenticationAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        out.write("{\"status\":\"error\",\"msg\":\"权限不足，请联系管理员!\"}");
+        RespBean error = RespBean.error("权限不足,请联系管理员吧");
+        out.write(new ObjectMapper().writeValueAsString(error));
         out.flush();
         out.close();
     }

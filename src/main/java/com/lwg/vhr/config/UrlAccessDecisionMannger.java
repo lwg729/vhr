@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,8 @@ public class UrlAccessDecisionMannger implements AccessDecisionManager {
      * @throws InsufficientAuthenticationException
      */
     @Override
-    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-        //遍历出传来所需要的角色
+    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, AuthenticationException {
+       /* //遍历出传来所需要的角色
         Iterator<ConfigAttribute> iterator = collection.iterator();
         while (iterator.hasNext()) {
             ConfigAttribute ca = iterator.next();
@@ -44,13 +45,34 @@ public class UrlAccessDecisionMannger implements AccessDecisionManager {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             //用户包含一个请求的角色权限就算授权成功 遍历是查看当前的角色列表中是否准备需要的权限,具备就返回,不具备报异常
             for (GrantedAuthority authority : authorities) {
-                if (authentication.getAuthorities().equals(needRole)) {
+                if (authority.getAuthority().equals(needRole)) {
                     return;
                 }
             }
-            throw new AccessDeniedException("权限不足");
 
         }
+        throw new AccessDeniedException("权限不足");*/
+        Iterator<ConfigAttribute> iterator = collection.iterator();
+        while (iterator.hasNext()) {
+            ConfigAttribute ca = iterator.next();
+            //当前请求需要的权限
+            String needRole = ca.getAttribute();
+            if ("ROLE_LOGIN".equals(needRole)) {
+                if (authentication instanceof AnonymousAuthenticationToken) {
+                    throw new BadCredentialsException("未登录");
+                } else
+                    return;
+            }
+            //当前用户所具有的权限
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals(needRole)) {
+                    return;
+                }
+            }
+        }
+        throw new AccessDeniedException("权限不足!");
+
     }
 
     @Override

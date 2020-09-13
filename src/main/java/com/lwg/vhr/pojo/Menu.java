@@ -1,8 +1,9 @@
 package com.lwg.vhr.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Menu {
+public class Menu implements Serializable {
     private Integer id;
 
     private String url;
@@ -22,9 +23,10 @@ public class Menu {
     private Integer parentid;
 
     private Boolean enabled;
-    private List<Role> roles;
 
     private List<Menu> children;
+
+    private List<Role> roles;
 
     public List<Menu> getChildren() {
         return children;
@@ -33,6 +35,8 @@ public class Menu {
     public void setChildren(List<Menu> children) {
         this.children = children;
     }
+
+
 
     public List<Role> getRoles() {
         return roles;

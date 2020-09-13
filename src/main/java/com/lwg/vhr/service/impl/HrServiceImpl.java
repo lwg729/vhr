@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.lwg.vhr.mapper.HrMapper;
 import com.lwg.vhr.pojo.Hr;
 import com.lwg.vhr.service.HrService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class HrServiceImpl implements HrService, UserDetailsService {
 
     @Autowired
