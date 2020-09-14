@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     HrServiceImpl hrService;
@@ -47,13 +46,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenticationAccessDeniedHandler deniedHandler;
 
 
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(hrService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(hrService);
     }
 
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/index.html", "/static/**", "login_p");
+        web.ignoring().antMatchers("/index.html", "/static/**","/doLogin");
     }
 
     protected void configure(HttpSecurity http) throws Exception {
@@ -68,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .and()
-                .formLogin().loginPage("/login_p").loginProcessingUrl("/login")
+                .formLogin().loginPage("/doLogin").loginProcessingUrl("/login")
                 .usernameParameter("username").passwordParameter("password").permitAll()
                 .failureHandler((req, resp, e) -> {
 

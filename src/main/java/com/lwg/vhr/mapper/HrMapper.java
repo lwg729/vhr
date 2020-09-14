@@ -2,6 +2,8 @@ package com.lwg.vhr.mapper;
 
 import com.lwg.vhr.pojo.Hr;
 import com.lwg.vhr.pojo.HrExample;
+import com.lwg.vhr.pojo.Role;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -32,4 +34,6 @@ public interface HrMapper {
     int updateByPrimaryKey(Hr record);
 
     Hr loadUserByUsername(String username);
+
+    List<Role> getHrRolesById(Integer id);
 }
